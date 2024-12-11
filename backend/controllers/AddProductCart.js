@@ -1,53 +1,41 @@
 const Cart = require("../model/Cart");
-const Product = require("../model/Product");
 
 const addProductCart = async (req, res) => {
-  const { nombre, imagen_url, precio } = req.body;
+  try {
+    const { nombre, imagen_url, precio } = req.body;
 
-    // Verifica que nombre no sea null
-  if (!nombre) {
-    return res.status(400).json({ mensaje: "El nombre del producto no puede ser nulo" });
-  }
-  
-  /* Nos fijamos si tenemos el producto */
-  const estaEnProducts = await Product.findOne({ nombre });
+    // Verificar si el producto ya está en el carrito
+    const productoExistente = await Cart.findOne({ nombre });
 
-  /* Nos fijamos si todos los campos vienen con info */
-  const noEstaVacio = nombre !== "" && imagen_url !== "" && precio !== "";
+    if (productoExistente) {
+      // Si el producto ya está, incrementa el stock
+      productoExistente.stock += 1;
 
-  /* Nos fijamos si el producto ya esta en el carrito */
-  const estaEnElCarrito = await Cart.findOne({ nombre });
+      const productoActualizado = await productoExistente.save();
+      return res.json({
+        mensaje: `El stock del producto '${productoActualizado.nombre}' fue actualizado`,
+        producto: productoActualizado,
+      });
+    }
 
-  /* Si no tenemos el producto */
-  if (!estaEnProducts) {
-    res.status(400).json({
-      mensaje: "Este producto no se encuentra en nuestra base de datos",
+    // Si no está en el carrito, lo agrega
+    const nuevoProducto = new Cart({
+      nombre,
+      imagen_url,
+      precio,
+      stock: 1, // Stock inicial
     });
 
-    /* Si nos envian algo y no esta en el carrito lo agregamos */
-  } else if (noEstaVacio && !estaEnElCarrito) {
-    const newProductInCart = new Cart({ nombre, imagen_url, precio, stock: 1 });
-
-    /* Y actualizamos la prop inCart: true en nuestros productos */
-    await Product.findByIdAndUpdate(
-      estaEnProducts?._id,
-      { inCart: true, nombre, imagen_url, precio },
-      { new: true }
-    )
-      .then((product) => {
-        newProductInCart.save();
-        res.json({
-          mensaje: `El producto fue agregado al carrito`,
-          product,
-        });
-      })
-      .catch((error) => console.error(error));
-
-    /* Y si esta en el carrito avisamos */
-  } else if (estaEnElCarrito) {
-    res.status(400).json({
-      mensaje: "El producto ya esta en el carrito",
+    const productoGuardado = await nuevoProducto.save();
+    res.status(201).json({
+      mensaje: `El producto '${productoGuardado.nombre}' fue agregado al carrito`,
+      producto: productoGuardado,
     });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ mensaje: "Error al agregar producto al carrito", error });
   }
 };
 
