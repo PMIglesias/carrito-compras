@@ -10,6 +10,7 @@ import LoginForm from "./components/Forms/LoginForm";
 import RegisterForm from "./components/Forms/RegisterForm";
 import SuccessModal from "./components/Modal/Success";
 import ErrorModal from "./components/Modal/Error";
+import axios from "axios";
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
