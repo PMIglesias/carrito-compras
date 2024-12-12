@@ -31,12 +31,14 @@ function App() {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]); // Estado para productos filtrados
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("http://localhost:4001/api/productos");
         setProducts(response.data);
+        setFilteredProducts(response.data); // Inicializar con todos los productos
       } catch (error) {
         console.error("Error al obtener los productos", error);
       }
@@ -68,6 +70,14 @@ function App() {
 
   const handleSearchQueryChange = (query) => {
     setSearchQuery(query);
+
+    // Filtrar productos si hay productos cargados
+    if (products.length > 0) {
+      const filteredProducts = products.filter(product =>
+        product.nombre.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredProducts(filteredProducts);  // Crear un nuevo estado para los productos filtrados
+    }
   };
 
   const handleCategoryClick = async (categoryId) => {
@@ -93,7 +103,7 @@ function App() {
           />
           <Hero />
           <div className="main-content flex-grow-1">
-            <Home />
+            <Home products={filteredProducts} /> {/* Pasar productos filtrados a Home */}
           </div>
           <Footer /> {/* Agregamos el Footer aquí */}
         </div>
