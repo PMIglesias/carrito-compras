@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Navbar,
   Nav,
@@ -10,21 +10,20 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import logo from "../../assets/logo_w.png";
-import personIcon from "../../assets/person.png"; // Asegúrate de tener la imagen en esa ruta
-import "./NavbarComponent.css"; // Asegúrate de tener este archivo creado
 import Cart from "../Cart";
+import { UserContext } from "../../UserContext"; // Importar el contexto del usuario
 
 const NavbarComponent = ({
   openLoginModal,
-  openDetalleCarrito,
   onCategoryClick,
   onShowAllProducts,
   onSearchQueryChange,
   onProductsUpdate,
 }) => {
+  const { user, setUser } = useContext(UserContext); // Obtener información del usuario
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para saber si el usuario está logueado
+  const [setIsLoggedIn] = useState(false); // Estado para saber si el usuario está logueado
   const [products, setProducts] = useState([]);
 
   // Obtener categorías desde el backend
@@ -67,9 +66,17 @@ const NavbarComponent = ({
       console.error("Error al obtener productos:", error);
     }
   };
+  const handleLogout = () => {
+    // Limpia el token y el estado del usuario
+    localStorage.removeItem("token");
+    setUser(null); // Limpia el usuario del contexto
+    setIsLoggedIn(false); // Cambia el estado de logueo
+    alert("Has cerrado sesión correctamente.");
+    console.log("Sesión cerrada");
+  };
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
       <Container fluid>
         <Navbar.Brand href="#home">
           <img
@@ -119,7 +126,17 @@ const NavbarComponent = ({
                   </NavDropdown.Item>
                 ))}
               </NavDropdown>
-              {!isLoggedIn ? (
+              {user ? (
+                <NavDropdown
+                  title={user.nombre}
+                  id="user-dropdown"
+                  aria-label={`Opciones del usuario ${user.nombre}`}
+                >
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Salir
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
                 <button
                   className="nav-link btn btn-link"
                   onClick={openLoginModal}
@@ -127,16 +144,6 @@ const NavbarComponent = ({
                 >
                   Ingresar
                 </button>
-              ) : (
-                <Nav.Link href="#profile" aria-label="Perfil de usuario">
-                  <img
-                    src={personIcon}
-                    alt="Ícono de usuario"
-                    width="30"
-                    height="30"
-                    className="person-icon rounded-circle"
-                  />
-                </Nav.Link>
               )}
             </Nav>
           </Nav>
