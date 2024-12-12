@@ -43,24 +43,6 @@ const NavbarComponent = ({
     fetchCategories();
   }, []);
 
-  // Manejar el inicio de sesión (esto debe ser modificado según tu lógica de autenticación)
-  const handleLogin = async (credentials) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:4001/api/login",
-        credentials
-      );
-      if (response.data.success) {
-        setIsLoggedIn(true); // Iniciar sesión
-        // Puedes almacenar el token aquí, si es necesario
-      } else {
-        console.log("Error en inicio de sesión");
-      }
-    } catch (error) {
-      console.error("Error en login:", error);
-    }
-  };
-
   // Manejar cambio en la barra de búsqueda
   const handleSearchChange = (e) => {
     const query = e.target.value;
