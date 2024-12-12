@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const userRouter = require("./routes/user");
 
 const db = require("./database");
 const controllers = require("./controllers");
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api", userRouter); // Rutas de usuarios
 
 /* GET */
 app.get("/products", controllers.getProducts);
