@@ -1,10 +1,10 @@
-import "./App.scss";
 import React, { useState, useEffect } from "react";
 import Home from "./components/Home";
 import { CartProvider } from "./context/CartContext";
 import { UserProvider } from "./UserContext";
 import NavbarComponent from "./components/NavBar/NavBar";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Footer/Footer"; // Importamos el Footer
+
 import Hero from "./components/Carousel/Carousel";
 import Modal from "react-bootstrap/Modal";
 import LoginForm from "./components/Forms/LoginForm";
@@ -26,22 +26,19 @@ function App() {
     password: "",
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [pedidos, setPedidos] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Puedes cargar productos al inicio si lo necesitas
-    // Aquí un ejemplo de cómo obtener los productos desde la API si es necesario:
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/productos");
+        const response = await axios.get("http://localhost:4001/api/productos");
         setProducts(response.data);
       } catch (error) {
         console.error("Error al obtener los productos", error);
       }
     };
     fetchProducts();
-  }, []); // Este efecto se ejecuta solo una vez cuando se monta el componente
+  }, []);
 
   const toggleModal = (modalType) => {
     setIsLoginModalOpen(modalType === "login");
@@ -80,66 +77,69 @@ function App() {
     }
   };
 
-  /* Envolvemos la home con el provider del context */
   return (
     <UserProvider>
-    <CartProvider>
-      <NavbarComponent 
-              openLoginModal={() => toggleModal("login")}
-              openRegisterModal={() => toggleModal("register")}
-              onCategoryClick={handleCategoryClick}
-              onSearchQueryChange={handleSearchQueryChange}
+      <CartProvider>
+        <div className="App d-flex flex-column min-vh-100">
+          <NavbarComponent 
+            openLoginModal={() => toggleModal("login")}
+            openRegisterModal={() => toggleModal("register")}
+            onCategoryClick={handleCategoryClick}
+            onSearchQueryChange={handleSearchQueryChange}
+          />
+          <Hero />
+          <div className="main-content flex-grow-1">
+            <Home />
+          </div>
+          <Footer /> {/* Agregamos el Footer aquí */}
+        </div>
+        <Modal
+          show={isLoginModalOpen || isRegisterModalOpen}
+          onHide={() => toggleModal("")}
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {modalContent === "login" && "Iniciar Sesión"}
+              {modalContent === "register" && "Registrarse"}
+              {modalContent === "success" && `Bienvenido, ${userName}`}
+              {modalContent === "error" && "Error"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {modalContent === "login" && (
+              <LoginForm
+                onClose={() => toggleModal("")}
+                onRegister={() => toggleModal("register")}
+                onSuccess={handleLoginSuccess}
+                onError={handleError}
               />
-      <Hero />
-      <Home />
-      <Footer />
-      <Modal
-        show={isLoginModalOpen || isRegisterModalOpen}
-        onHide={() => toggleModal("")}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {modalContent === "login" && "Iniciar Sesión"}
-            {modalContent === "register" && "Registrarse"}
-            {modalContent === "success" && `Bienvenido, ${userName}`}
-            {modalContent === "error" && "Error"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {modalContent === "login" && (
-            <LoginForm
-              onClose={() => toggleModal("")}
-              onRegister={() => toggleModal("register")}
-              onSuccess={handleLoginSuccess}
-              onError={handleError}
-            />
-          )}
-          {modalContent === "register" && (
-            <RegisterForm
-              onClose={() => toggleModal("")}
-              onLogin={() => toggleModal("login")}
-              onSuccess={handleRegisterSuccess}
-              onError={handleError}
-              formData={formData}
-              setFormData={setFormData}
-            />
-          )}
-          {modalContent === "success" && (
-            <SuccessModal
-              message="Ha iniciado sesión correctamente"
-              onClose={() => toggleModal("")}
-            />
-          )}
-          {modalContent === "error" && (
-            <ErrorModal
-              message={errorMessage}
-              onClose={() => toggleModal("")}
-            />
-          )}
-        </Modal.Body>
-      </Modal>
-    </CartProvider>
+            )}
+            {modalContent === "register" && (
+              <RegisterForm
+                onClose={() => toggleModal("")}
+                onLogin={() => toggleModal("login")}
+                onSuccess={handleRegisterSuccess}
+                onError={handleError}
+                formData={formData}
+                setFormData={setFormData}
+              />
+            )}
+            {modalContent === "success" && (
+              <SuccessModal
+                message="Ha iniciado sesión correctamente"
+                onClose={() => toggleModal("")}
+              />
+            )}
+            {modalContent === "error" && (
+              <ErrorModal
+                message={errorMessage}
+                onClose={() => toggleModal("")}
+              />
+            )}
+          </Modal.Body>
+        </Modal>
+      </CartProvider>
     </UserProvider>
   );
 }

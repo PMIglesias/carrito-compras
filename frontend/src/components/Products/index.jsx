@@ -12,18 +12,17 @@ const Products = () => {
         products.map((product, i) => (
           <div key={i} className={styles.product}>
             <img src={product.imagen_url} alt={product.nombre} />
-            <div>
-              <p>
-                {product.nombre} - ${product.precio}
-              </p>
+            <div className={styles.info}>
+              <p>{product.nombre}</p>
+              <span>${product.precio}</span>
             </div>
-            {!product.inCart ? (
-              <button onClick={() => addItemToCart(product)}>
-                Add to Cart
-              </button>
-            ) : (
-              <button>En el carrito</button>
-            )}
+            <button
+              onClick={() => addItemToCart(product)}
+              disabled={product.inCart}
+              className={product.inCart ? styles.disabledButton : ""}
+            >
+              {product.inCart ? "En el carrito" : "Añadir al carrito"}
+            </button>
           </div>
         ))}
     </div>
