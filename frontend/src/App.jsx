@@ -2,6 +2,7 @@ import "./App.scss";
 import React, { useState, useEffect } from "react";
 import Home from "./components/Home";
 import { CartProvider } from "./context/CartContext";
+import { UserProvider } from "./UserContext";
 import NavbarComponent from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
 import Hero from "./components/Carousel/Carousel";
@@ -15,7 +16,6 @@ import axios from "axios";
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isDetalleCarritoOpen, setIsDetalleCarritoOpen] = useState(false);
   const [modalContent, setModalContent] = useState("login");
   const [errorMessage, setErrorMessage] = useState("");
   const [userName, setUserName] = useState("");
@@ -69,10 +69,27 @@ function App() {
     setSearchQuery(query);
   };
 
+  const handleCategoryClick = async (categoryId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4001/api/categorias/${categoryId}/productos`
+      );
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error al obtener productos por categoría:", error);
+    }
+  };
+
   /* Envolvemos la home con el provider del context */
   return (
+    <UserProvider>
     <CartProvider>
-      <NavbarComponent />
+      <NavbarComponent 
+              openLoginModal={() => toggleModal("login")}
+              openRegisterModal={() => toggleModal("register")}
+              onCategoryClick={handleCategoryClick}
+              onSearchQueryChange={handleSearchQueryChange}
+              />
       <Hero />
       <Home />
       <Footer />
@@ -122,37 +139,8 @@ function App() {
           )}
         </Modal.Body>
       </Modal>
-
-      {/* Modal para Detalle de Carrito */}
-      <Modal
-        show={isDetalleCarritoOpen}
-        onHide={() => setIsDetalleCarritoOpen(false)}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Detalle del Carrito</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {pedidos.length > 0 ? (
-            <ul>
-              {pedidos.map((pedido, index) => (
-                <li key={index}>{pedido}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No hay pedidos en el carrito.</p>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            className="btn btn-secondary"
-            onClick={() => setIsDetalleCarritoOpen(false)}
-          >
-            Cerrar
-          </button>
-        </Modal.Footer>
-      </Modal>
     </CartProvider>
+    </UserProvider>
   );
 }
 

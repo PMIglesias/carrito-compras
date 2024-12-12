@@ -47,7 +47,7 @@ const NavbarComponent = ({
   const handleLogin = async (credentials) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/login",
+        "http://localhost:4001/api/login",
         credentials
       );
       if (response.data.success) {
