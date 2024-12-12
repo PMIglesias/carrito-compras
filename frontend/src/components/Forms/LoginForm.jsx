@@ -12,7 +12,7 @@ function LoginForm({ onClose, onRegister, onSuccess, onError }) {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
     try {
-      const response = await fetch("http://localhost:3001/api/login", {
+      const response = await fetch("http://localhost:4000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,9 +23,9 @@ function LoginForm({ onClose, onRegister, onSuccess, onError }) {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
-        setUser(data); // Guardar la información del usuario en el contexto
+        setUser(data.user); // Guardar la información del usuario en el contexto
         localStorage.setItem("token", data.token); // Almacena el token en localStorage
-        onSuccess(data.nombre); // Llamar a la función onSuccess con el nombre del usuario
+        onSuccess(data.user.nombre); // Llamar a la función onSuccess con el nombre del usuario
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData);

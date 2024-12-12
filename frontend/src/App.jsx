@@ -13,6 +13,10 @@ import SuccessModal from "./components/Modal/Success";
 import ErrorModal from "./components/Modal/Error";
 import axios from "axios";
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
