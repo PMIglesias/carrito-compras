@@ -4,7 +4,7 @@ Este proyecto es una tienda online dedicada a la venta de productos tecnológico
 Notas
 Para realizar pruebas locales, es necesario tener instalado MongoDB y Node.js 18 o superior.
 Ejecuta npm install para instalar o actualizar las dependencias del proyecto.
-Para conectar una base de datos y hacer pruebas locales, ejecuta el backend con el comando npm start.
+Para conectar una base de datos y hacer pruebas locales, ejecuta el backend con el comando npm run dev.
 Esto actualizará todas las dependencias necesarias y conectará con la base de datos definida en el archivo .env.
 Configuración de la Base de Datos
 La configuración de la base de datos se realiza mediante un archivo .env, donde podrás definir los parámetros de conexión.
