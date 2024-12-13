@@ -12,6 +12,7 @@ import RegisterForm from "./components/Forms/RegisterForm";
 import SuccessModal from "./components/Modal/Success";
 import ErrorModal from "./components/Modal/Error";
 import axios from "axios";
+import Cart from "./components/Cart";
 
 function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -69,10 +70,10 @@ function App() {
 
     // Filtrar productos si hay productos cargados
     if (products.length > 0) {
-      const filteredProducts = products.filter(product =>
+      const filteredProducts = products.filter((product) =>
         product.nombre.toLowerCase().includes(query.toLowerCase())
       );
-      setFilteredProducts(filteredProducts);  // Crear un nuevo estado para los productos filtrados
+      setFilteredProducts(filteredProducts); // Crear un nuevo estado para los productos filtrados
     }
   };
 
@@ -97,9 +98,11 @@ function App() {
             onCategoryClick={handleCategoryClick}
             onSearchQueryChange={handleSearchQueryChange}
           />
+          <Cart />
           <Hero />
           <div className="main-content flex-grow-1">
-            <Home products={filteredProducts} /> {/* Pasar productos filtrados a Home */}
+            <Home products={filteredProducts} />{" "}
+            {/* Pasar productos filtrados a Home */}
           </div>
           <Footer /> {/* Agregamos el Footer aquí */}
         </div>

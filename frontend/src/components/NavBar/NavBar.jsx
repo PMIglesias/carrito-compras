@@ -12,6 +12,7 @@ import axios from "axios";
 import logo from "../../assets/logo_w.png";
 import Cart from "../Cart";
 import { UserContext } from "../../UserContext"; // Importar el contexto del usuario
+import "./NavBar.css";
 
 const NavbarComponent = ({
   openLoginModal,
@@ -88,22 +89,26 @@ const NavbarComponent = ({
           />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav" className="w-100">
+        <Navbar.Collapse id="responsive-navbar-nav" className="w-100 ">
           <Nav className="ml-auto w-100">
             <Form className="d-flex w-100 ps-3">
               <FormControl
                 type="search"
                 placeholder="Buscar"
-                className="mr-2 w-100"
+                className="mr-2 w-100 "
                 aria-label="Buscar productos en la tienda"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
-              <Button variant="outline-success" aria-label="Buscar">
+              <Button
+                variant="outline-success"
+                aria-label="Buscar"
+                className="search-button"
+              >
                 <i className="bi bi-search"></i>
               </Button>
             </Form>
-            <Nav className="ms-auto">
+            <Nav className="ms-0">
               <Nav.Link
                 href="#productos"
                 onClick={onShowAllProducts}
@@ -138,7 +143,7 @@ const NavbarComponent = ({
                 </NavDropdown>
               ) : (
                 <button
-                  className="nav-link btn btn-link"
+                  className="ingreso nav-link btn btn-link"
                   onClick={openLoginModal}
                   aria-label="Abrir modal de inicio de sesión"
                 >
@@ -148,7 +153,6 @@ const NavbarComponent = ({
             </Nav>
           </Nav>
         </Navbar.Collapse>
-        <Cart />
       </Container>
     </Navbar>
   );

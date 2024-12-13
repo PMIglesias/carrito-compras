@@ -1,15 +1,16 @@
 .cartContainer {
-  width: 10vw;
+  width: 100vw;
   height: 50px;
   display: flex;
   justify-content: flex-end;
   font-family: Roboto;
   z-index: 10;
-  position: relative;
+  position: fixed; /* Cambiado a fixed para que sea flotante */
+  top: 60px; /* Ajusta según sea necesario */
+  right: 5px;
 }
 
 .buttonCartContainer {
-  position: absolute;
   margin-top: 10px;
   margin-right: 20px;
   cursor: pointer;
@@ -75,7 +76,7 @@
   }
 
   .productsContainer {
-    max-height: 200px;
+    max-height: 500px;
     overflow-y: scroll;
     margin-top: 5px;
   }
@@ -99,6 +100,7 @@
   .cart {
     width: 80%;
     max-width: 350px; /* Ajustar el tamaño en dispositivos más pequeños */
+    position: fixed;
     top: 70px; /* Asegurar que no se superponga */
   }
 }
@@ -108,5 +110,11 @@
     width: 90%;
     max-width: 300px; /* Ajustar aún más en pantallas muy pequeñas */
     top: 60px;
+  }
+}
+
+@media screen and (max-width: 998px) {
+  .cartContainer {
+    top: 55px;
   }
 }

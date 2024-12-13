@@ -1,0 +1,13 @@
+.ingreso,
+#user-dropdown {
+  margin-right: 5rem;
+}
+
+@media (max-width: 1000px) {
+  .search-button {
+    margin-right: 5rem; /* Ajusta el valor según sea necesario */
+  }
+  .links {
+    margin-right: 5rem; /* Ajusta el valor según sea necesario */
+  }
+}
