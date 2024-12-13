@@ -104,13 +104,13 @@ const NavbarComponent = ({
               </Button>
             </Form>
             <Nav className="ms-auto">
-              <Nav.Link
-                href="#productos"
-                onClick={onShowAllProducts}
-                aria-label="Ver todos los productos"
-              >
-                Productos
-              </Nav.Link>
+            <Nav.Link
+  href="#productos"
+  onClick={onShowAllProducts} // Si tienes alguna función que se necesita ejecutar
+  aria-label="Ver todos los productos"
+>
+  Productos
+</Nav.Link>
               <NavDropdown
                 title="Categorías"
                 id="collasible-nav-dropdown"
