@@ -7,7 +7,7 @@ const Products = () => {
   const { addItemToCart, products } = useContext(CartContext);
 
   return (
-    <div className={styles.productsContainer}>
+    <div id="productos" className={styles.productsContainer}>
       {products &&
         products.map((product, i) => (
           <div key={i} className={styles.product}>
